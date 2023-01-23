@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+#include <random>
+
+// Class for password generator
+class PasswordGenerator {
+public:
+    // Function to generate a random password with a given length and complexity
+    std::string generatePassword(int length, int complexity) {
+        std::string password;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(33, 126); // ASCII range for printable characters
+
+        // Generate the password
+        for (int i = 0; i < length; i++) {
+            char c = (char)dis(gen);
+            if(complexity == 1 && (c>='0' && c<='9'))
+                password += c;
+            else if(complexity == 2 && ((c>='0' && c<='9') || (c>='A' && c<='Z') || (c>='a' && c<='z')))
+                password += c;
+            else if(complexity == 3)
+                password += c;
+            else
+                i--;
+        }
+
+        return password;
+    }
+};
+
+int main() {
+    // Create a password generator
+    PasswordGenerator generator;
+
+    // Get the password length from the user
+    int length;
+    std::cout << "Enter the desired length of the password: ";
+    std::cin >> length;
+
+    // Get the password complexity from the user
+    int complexity;
+    std::cout << "Enter the desired complexity of the password (1: numbers only, 2: alphabets and numbers, 3: alphabets, numbers and special characters): ";
+    std::cin >> complexity;
+
+    // Generate the password
+    std::string password = generator.generatePassword(length, complexity);
+
+    // Print the password
+    std::cout << "Generated password: " << password << std::endl;
+
+    return 0;
+}
